@@ -1,0 +1,12 @@
+.content-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit);
+  gap: 20px;
+  padding: 20px;
+}
+
+@media (min-width: 768px) {
+  .content-section {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
