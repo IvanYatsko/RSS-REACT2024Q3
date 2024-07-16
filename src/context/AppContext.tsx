@@ -1,23 +1,17 @@
 import React, { createContext, useReducer, ReactNode } from 'react';
+import { SET_SEARCH_VALUE } from '../constants/action';
+import { ActionType, StateType } from '../types/state';
 
-type StateType = {
-  count: number;
-  name: string;
-};
-
-type ActionType = {
-  type: string;
-  payload?: number;
-};
-
-const initialState: StateType = { count: 0, name: 'Vite + React' };
+const initialState: StateType = { count: 0, searchValue: '' };
 
 const reducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
-    case 'increment':
-      return { ...state, count: state.count + (action.payload || 1) };
-    case 'decrement':
-      return { ...state, count: state.count - (action.payload || 1) };
+    // case 'increment':
+    //   return { ...state, count: state.count + (action.payload || 1) };
+    // case 'decrement':
+    //   return { ...state, count: state.count - (action.payload || 1) };
+    case SET_SEARCH_VALUE:
+      return { ...state, searchValue: action.payload };
     default:
       return state;
   }

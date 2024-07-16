@@ -1,22 +1,27 @@
-import { useContext, useState } from 'react';
-import './SearchSection.css';
+import { useState } from 'react';
+
+import { useAppContext } from '../../hooks/useAppContext';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import ButtonError from '../ButtonError';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
-import { HAS_CYRILLIC, HAS_SPACES } from '../../constants/validationConstants';
-import { AppContext } from '../../context/AppContext';
+
+import { setSearchValue } from '../../context/action/action';
+
+import { HAS_CYRILLIC, HAS_SPACES } from '../../constants/validation';
+
+import './SearchSection.css';
 
 const SearchSection: React.FC = () => {
-  const { state, dispatch } = useContext(AppContext);
-  console.log(dispatch({ type: 'increment', payload: 1 }))
+  const searchValue = useAppContext(state => state.searchValue);
+  const dispatch = useAppDispatch();
 
-  const [searchValue, setSearchValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  // const [pokemons, setPokemons] = useState([]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
+    dispatch(setSearchValue(event.target.value));
   };
 
   const handleSearch = () => {
