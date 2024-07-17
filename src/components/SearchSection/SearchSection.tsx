@@ -1,17 +1,12 @@
-import { useState } from 'react';
-
-import { useAppContext } from '../../hooks/useAppContext';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-
+import { useEffect, useState } from 'react';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import ButtonError from '../ButtonError';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
-
-import { setSearchValue } from '../../context/action/action';
-
-import { HAS_CYRILLIC, HAS_SPACES } from '../../constants/validation';
-
+import { setInitialSearchValue, setSearchValue } from '../../context/action/action';
 import './SearchSection.css';
+import { useAppContext } from '../../hooks/useAppContext';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { HAS_CYRILLIC, HAS_SPACES } from '../../constants/validation';
 
 const SearchSection: React.FC = () => {
   const searchValue = useAppContext(state => state.searchValue);
@@ -21,12 +16,11 @@ const SearchSection: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    localStorage.setItem('searchValue', event.target.value);
     dispatch(setSearchValue(event.target.value));
   };
 
   const handleSearch = () => {
-    localStorage.setItem('searchValue', searchValue);
-
     setIsLoading(true);
 
     if (HAS_SPACES.test(searchValue)) {
@@ -41,6 +35,10 @@ const SearchSection: React.FC = () => {
   const onClick = () => {
     console.log('Error simulation');
   };
+
+  useEffect(() => {
+    dispatch(setInitialSearchValue(localStorage.getItem('searchValue') || ''));
+  }, []);
 
   return (
     <>

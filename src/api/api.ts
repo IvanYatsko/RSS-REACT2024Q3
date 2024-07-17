@@ -1,14 +1,16 @@
 import apiConstants from '../constants/api';
-import IPokemonDetails from '../types/Pokemon/PokemonDetails';
-import { IPokemons } from '../types/Pokemon/Pokemons';
+import { IPokemonDetails, IPokemonResult, IPokemons } from '../types/Pokemon/Pokemons';
 
-export async function fetchPokemonsList(offset: number, limit: number) {
-  const response = await fetch(
-    `${apiConstants.API_URL}pokemon/?offset=${offset}&limit=${limit}`,
-  );
+export const fetchPokemonsList = async (offset: number): Promise<IPokemonResult[]> => {
+  const response = await fetch(`${apiConstants.API_URL}pokemon/?offset=${offset}`);
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
   const data: IPokemons = await response.json();
   return data.results;
-}
+};
 
 export async function fetchPokemonDetails(url: string) {
   const response = await fetch(url);

@@ -1,17 +1,22 @@
 import React, { createContext, useReducer, ReactNode } from 'react';
-import { SET_SEARCH_VALUE } from '../constants/action';
+import {
+  GET_POKEMONS_LIST,
+  SET_INITIAL_SEARCH_VALUE,
+  SET_SEARCH_VALUE,
+} from '../constants/action';
 import { ActionType, StateType } from '../types/state';
+import { IPokemonDetails } from '../types/Pokemon/Pokemons';
 
-const initialState: StateType = { count: 0, searchValue: '' };
+const initialState: StateType = { searchValue: '', pokemonList: [] };
 
 const reducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
-    // case 'increment':
-    //   return { ...state, count: state.count + (action.payload || 1) };
-    // case 'decrement':
-    //   return { ...state, count: state.count - (action.payload || 1) };
+    case GET_POKEMONS_LIST:
+      return { ...state, pokemonList: action.payload as IPokemonDetails[] };
+    case SET_INITIAL_SEARCH_VALUE:
+      return { ...state, searchValue: action.payload as string };
     case SET_SEARCH_VALUE:
-      return { ...state, searchValue: action.payload };
+      return { ...state, searchValue: action.payload as string };
     default:
       return state;
   }

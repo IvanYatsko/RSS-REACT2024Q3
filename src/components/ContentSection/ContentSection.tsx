@@ -1,43 +1,55 @@
 import { useEffect, useState } from 'react';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import Card from '../Card/Card';
-import { fetchPokemonDetails, fetchPokemonsList } from '../../api/api';
-import { IPokemonResult } from '../../types/Pokemon/Pokemons';
-import IPokemonDetails from '../../types/Pokemon/PokemonDetails';
+import { IPokemonDetails } from '../../types/Pokemon/Pokemons';
 import './ContentSection.css';
+import SelectedCard from '../SelectedCard/SelectedCard';
+import { getPokemonsList } from '../../context/action/action';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppContext } from '../../hooks/useAppContext';
 
 const ContentSection: React.FC = () => {
-  const [pokemon, setPokemon] = useState<IPokemonDetails[]>([]);
+  const dispatch = useAppDispatch();
+  const pokemonList = useAppContext(state => state.pokemonList);
+
   const [isLoading, setIsLoading] = useState(false);
-  const [offset, setOffset] = useState(0);
-  const [limit, setLimit] = useState(20);
+  const [selectedCard, setSelectedCard] = useState<IPokemonDetails | null>(null);
+  const [isCardSelected, setIsCardSelected] = useState(false);
+
+  const handleCardClick = (pokemon: IPokemonDetails) => {
+    setIsCardSelected(true);
+    setSelectedCard(pokemon);
+  };
+
+  const handleClose = () => {
+    setIsCardSelected(false);
+    setSelectedCard(null);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-
-      try {
-        const response: IPokemonResult[] = await fetchPokemonsList(offset, limit);
-        const pokemonDetailsRequests = response.map(pokemon =>
-          fetchPokemonDetails(pokemon.url),
-        );
-        const PokemonDetails = await Promise.all(pokemonDetailsRequests);
-
-        setPokemon(PokemonDetails);
-        setIsLoading(false);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchData();
-  }, [offset, limit]);
+    getPokemonsList(20, dispatch);
+  }, []);
 
   return (
     <div className="content-section">
       {isLoading && <LoadingSpinner />}
-      {pokemon.map((pokemonItem, index) => (
-        <Card {...pokemonItem} key={index} />
-      ))}
+      <div className="cards-container">
+        {pokemonList.map((pokemonItem, index) => (
+          <Card
+            {...pokemonItem}
+            key={index}
+            onClick={() => handleCardClick(pokemonItem)}
+          />
+        ))}
+      </div>
+      {isCardSelected && selectedCard && (
+        <>
+          <div className="divider"></div>
+          <div className="selected-card-container">
+            <SelectedCard pokemon={selectedCard} onClose={handleClose} />
+          </div>
+        </>
+      )}
     </div>
   );
 };

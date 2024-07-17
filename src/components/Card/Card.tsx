@@ -1,16 +1,14 @@
-import IPokemonDetails from '../../types/Pokemon/PokemonDetails';
+import { IPokemonDetails } from '../../types/Pokemon/Pokemons';
 import './Card.css';
 
-const Card: React.FC<IPokemonDetails> = ({
-  name,
-  sprites,
-  stats,
-  onClose,
-}: IPokemonDetails) => {
-  const handleClose = () => onClose ? onClose() : null
+interface ICardProps extends IPokemonDetails {
+  onClick?: () => void;
+}
+
+const Card: React.FC<ICardProps> = ({ name, sprites, stats, onClick }: ICardProps) => {
+  const handleClick = () => (onClick ? onClick() : null);
   return (
-    <div className="pokemon-card">
-      <div className="close-button" onClick={handleClose}>x</div>
+    <div className="pokemon-card" onClick={handleClick}>
       <h3>{name.toLocaleUpperCase()}</h3>
       <img src={sprites.front_default} alt="Pokemon" className="pokemon-card_img" />
       <div className="pokemon-stats">

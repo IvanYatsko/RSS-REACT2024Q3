@@ -1,12 +1,14 @@
+import { IPokemonDetails } from './Pokemon/Pokemons';
+
 export interface IState {
   hasError: boolean;
 }
 export type StateType = {
-  count: number;
   searchValue: string;
+  pokemonList: IPokemonDetails[];
 };
 
 export type ActionType = {
   type: string;
-  payload?: string | number;
+  payload?: string | number | IPokemonDetails[];
 };
