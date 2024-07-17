@@ -1,0 +1,42 @@
+.search-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin: 20px 0;
+}
+
+.search-section_container {
+  width: 100%;
+}
+
+.search-section_legend{
+  width: 50%;
+}
+
+.search-section_container input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.search-section_button, .button-error {
+  width: 50%;
+}
+
+@media screen and (max-width: 768px) {
+  .search-section {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .search-section_container {
+    width: 45%;
+  }
+
+  .search-section_legend{
+    width: 47%;
+  }
+}
+
+
