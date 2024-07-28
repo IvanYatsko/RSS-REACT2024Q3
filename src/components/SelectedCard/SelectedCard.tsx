@@ -1,6 +1,6 @@
-import ISelectedPokemonDetails from '../../types/Pokemon/SelectedPokemonDetails';
+import ISelectedPokemonDetails from '../../types/Pokemon/selectedPokemonDetails';
 import Card from '../Card/Card';
-import './SelectedCard.css';
+import './selectedCard.css';
 
 const SelectedCard: React.FC<ISelectedPokemonDetails> = ({ pokemon, onClose }) => {
   return (

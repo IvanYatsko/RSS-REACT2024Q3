@@ -1,4 +1,4 @@
-import IPokemonDetails from './PokemonDetails';
+import IPokemonDetails from './pokemonDetails';
 
 interface ISelectedPokemonDetails {
   pokemon: IPokemonDetails;

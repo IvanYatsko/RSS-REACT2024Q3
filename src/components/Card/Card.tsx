@@ -1,14 +1,31 @@
-import { IPokemonDetails } from '../../types/Pokemon/Pokemons';
-import './Card.css';
+import ICardProps from '../../types/cardProps';
+import './card.css';
 
-interface ICardProps extends IPokemonDetails {
-  onClick?: () => void;
-}
-
-const Card: React.FC<ICardProps> = ({ name, sprites, stats, onClick }: ICardProps) => {
+const Card: React.FC<ICardProps> = ({
+  name,
+  sprites,
+  stats,
+  onClick,
+  onSelect,
+  selected,
+}: ICardProps) => {
   const handleClick = () => (onClick ? onClick() : null);
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (onSelect) {
+      onSelect(event.target.checked);
+    }
+  };
+
   return (
     <div className="pokemon-card" onClick={handleClick}>
+      <div className="checkbox-container">
+        <input
+          type="checkbox"
+          checked={selected}
+          onClick={e => e.stopPropagation()}
+          onChange={handleCheckboxChange}
+        />
+      </div>
       <h3>{name.toLocaleUpperCase()}</h3>
       <img src={sprites.front_default} alt="Pokemon" className="pokemon-card_img" />
       <div className="pokemon-stats">

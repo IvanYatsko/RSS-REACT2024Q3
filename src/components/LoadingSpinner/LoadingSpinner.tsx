@@ -1,5 +1,5 @@
 import loadingGif from '../../assets/loading-spinner.gif';
-import './LoadingSpinner.css';
+import './loadingSpinner.css';
 
 const LoadingSpinner: React.FC = () => {
   return (

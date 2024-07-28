@@ -9,16 +9,3 @@ export interface IPokemons {
   previous: string | null;
   results: IPokemonResult[];
 }
-
-export interface IPokemonDetails {
-  name: string;
-  sprites: {
-    front_default: string;
-  };
-  stats: {
-    base_stat: number;
-    stat: {
-      name: string;
-    };
-  }[];
-}

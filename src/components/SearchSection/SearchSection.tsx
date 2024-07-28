@@ -3,10 +3,10 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import ButtonError from '../ButtonError';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { setInitialSearchValue, setSearchValue } from '../../context/action/action';
-import './SearchSection.css';
+import './searchSection.css';
+import { HAS_CYRILLIC, HAS_SPACES } from '../../constants/validationConstants';
 import { useAppContext } from '../../hooks/useAppContext';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { HAS_CYRILLIC, HAS_SPACES } from '../../constants/validation';
 
 const SearchSection: React.FC = () => {
   const searchValue = useAppContext(state => state.searchValue);
@@ -16,13 +16,11 @@ const SearchSection: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    localStorage.setItem('searchValue', event.target.value);
     dispatch(setSearchValue(event.target.value));
+    localStorage.setItem('searchValue', event.target.value);
   };
 
   const handleSearch = () => {
-    setIsLoading(true);
-
     if (HAS_SPACES.test(searchValue)) {
       setErrorMessage('Search field cannot contain spaces');
       setIsLoading(false);

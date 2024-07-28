@@ -1,14 +1,17 @@
-import { IPokemonDetails } from './Pokemon/Pokemons';
+import IPokemonDetails from './Pokemon/pokemonDetails';
 
-export interface IState {
+interface IState {
   hasError: boolean;
 }
-export type StateType = {
+
+interface StateType {
   searchValue: string;
   pokemonList: IPokemonDetails[];
-};
+}
 
-export type ActionType = {
+interface ActionType {
   type: string;
   payload?: string | number | IPokemonDetails[];
-};
+}
+
+export type { StateType, ActionType, IState };

@@ -3,7 +3,7 @@ import {
   GET_POKEMONS_LIST,
   SET_INITIAL_SEARCH_VALUE,
   SET_SEARCH_VALUE,
-} from '../../constants/action';
+} from '../../constants/actionConstants';
 import { ActionType } from '../../types/state';
 
 export const setSearchValue = (value: string) => ({

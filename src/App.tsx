@@ -1,15 +1,18 @@
-import ContentSection from './components/ContentSection/ContentSection';
-import SearchSection from './components/SearchSection/SearchSection';
-
-import { AppProvider } from './context/AppContext';
-
+import { RouterProvider } from 'react-router-dom';
 import './App.css';
+import { AppProvider } from './context/AppContext';
+import router from './router/router';
+import useTheme from './hooks/useTheme';
 
 function App() {
+  const { isDark } = useTheme();
   return (
     <AppProvider>
-      <SearchSection />
-      <ContentSection />
+      <div className={`app ${isDark ? 'dark' : 'light'}`}>
+        <div className="container">
+          <RouterProvider router={router} />
+        </div>
+      </div>
     </AppProvider>
   );
 }

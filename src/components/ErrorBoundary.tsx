@@ -1,7 +1,7 @@
 import { Component, ErrorInfo } from 'react';
-import IProps from '../types/Props';
+import IProps from '../types/props';
 import ButtonTryAgain from './ButtonTryAgain';
-import IState from '../types/State';
+import { IState } from '../types/state';
 
 class ErrorBoundary extends Component<IProps, IState> {
   constructor(props: IProps) {

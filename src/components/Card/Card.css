@@ -32,3 +32,9 @@
   font-weight: bold;
   padding-right: 0.7rem;
 }
+
+.checkbox-container {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
