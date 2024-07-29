@@ -1,22 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import ButtonError from '../ButtonError';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
-import { setInitialSearchValue, setSearchValue } from '../../context/action/action';
 import './searchSection.css';
 import { HAS_CYRILLIC, HAS_SPACES } from '../../constants/validationConstants';
-import { useAppContext } from '../../hooks/useAppContext';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useActions } from '../../hooks/actions';
+import { useAppSelector } from '../../hooks/redux';
 
 const SearchSection: React.FC = () => {
-  const searchValue = useAppContext(state => state.searchValue);
-  const dispatch = useAppDispatch();
+  const { searchValue } = useAppSelector(state => state.search);
+  const { setSearchValue } = useActions();
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchValue(event.target.value));
+    setSearchValue(event.target.value);
     localStorage.setItem('searchValue', event.target.value);
   };
 
@@ -33,10 +32,6 @@ const SearchSection: React.FC = () => {
   const onClick = () => {
     console.log('Error simulation');
   };
-
-  useEffect(() => {
-    dispatch(setInitialSearchValue(localStorage.getItem('searchValue') || ''));
-  }, []);
 
   return (
     <>

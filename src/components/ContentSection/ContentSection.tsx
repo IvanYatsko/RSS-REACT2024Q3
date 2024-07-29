@@ -3,17 +3,16 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import Card from '../Card/Card';
 import IPokemonDetails from '../../types/Pokemon/pokemonDetails';
 import SelectedCard from '../SelectedCard/SelectedCard';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { useAppContext } from '../../hooks/useAppContext';
-import { getPokemonsList } from '../../context/action/action';
 import './contentSection.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import SelectionFlyout from '../SelectionFlyout/SelectionFlyout';
+import {
+  useLazyPokemonDetailsQuery,
+  usePokemonsQuery,
+} from '../../store/pokeapi/poke.api';
+import { IPokemonResult } from '../../types/Pokemon/pokemons';
 
 const ContentSection: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const pokemonList = useAppContext(state => state.pokemonList);
-
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState<IPokemonDetails | null>(null);
   const [isCardSelected, setIsCardSelected] = useState(false);
@@ -23,10 +22,33 @@ const ContentSection: React.FC = () => {
     const storedSelectedItems = localStorage.getItem('selectedItems');
     return storedSelectedItems ? new Set(JSON.parse(storedSelectedItems)) : new Set();
   });
+  const [pokemonList, setPokemonList] = useState<IPokemonDetails[]>([]);
 
   const page = Number(searchParams.get('page')) || 1;
   const id = Number(searchParams.get('details'));
   const offset = (page - 1) * 20;
+
+  const { isLoading: isLoadingPokemons, data: pokemons } = usePokemonsQuery(offset);
+  const [fetchPokemonDetails] = useLazyPokemonDetailsQuery();
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      if (pokemons) {
+        const pokemonDetailsPromises = pokemons.map(({ url }: IPokemonResult) =>
+          fetchPokemonDetails(url).unwrap(),
+        );
+
+        try {
+          const pokemonDetails = await Promise.all(pokemonDetailsPromises);
+          setPokemonList(pokemonDetails);
+        } catch (error) {
+          console.error('Error fetching pokemon details:', error);
+        }
+      }
+    };
+
+    fetchDetails();
+  }, [fetchPokemonDetails, pokemons]);
 
   const handleNextCard = () => {
     setIsLoading(true);
@@ -51,10 +73,6 @@ const ContentSection: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('selectedItems', JSON.stringify([...selectedItems]));
   }, [selectedItems]);
-
-  useEffect(() => {
-    getPokemonsList(offset, dispatch);
-  }, [offset, page]);
 
   useEffect(() => {
     if (Number(page) < 1) {
@@ -135,17 +153,17 @@ const ContentSection: React.FC = () => {
   return (
     <>
       <div className="button-container">
-        <button className="button-next" onClick={handleNextCard}>
-          Next
-        </button>
         {offset > 0 && (
           <button className="button-previous" onClick={handlePreviousCard}>
             Previous
           </button>
         )}
+        <button className="button-next" onClick={handleNextCard}>
+          Next
+        </button>
       </div>
       <div className={`content-section ${isCardSelected ? 'selected-mode' : ''}`}>
-        {isLoading && <LoadingSpinner />}
+        {(isLoading || isLoadingPokemons) && <LoadingSpinner />}
         <div className="cards-container" onClick={handelContentSectionClick}>
           {pokemonList.map(pokemonItem => (
             <Card

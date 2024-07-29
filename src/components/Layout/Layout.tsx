@@ -10,7 +10,7 @@ const Layout = () => {
       </header>
       <Outlet />
 
-      <footer>MikeKruk 2024</footer>
+      <footer>YatskoIvan 2024</footer>
     </div>
   );
 };
