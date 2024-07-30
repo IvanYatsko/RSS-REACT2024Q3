@@ -13,7 +13,7 @@
 
 .selected-mode {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 2px 40%;
   gap: 20px;
 }
 

@@ -15,6 +15,11 @@ export const pokeApi = createApi({
       }),
       transformResponse: (response: IPokemons) => response.results,
     }),
+    pokemonSearch: build.query<IPokemonDetails, number>({
+      query: (id: number) => ({
+        url: `https://pokeapi.co/api/v2/pokemon/${id}/`,
+      }),
+    }),
     pokemonDetails: build.query<IPokemonDetails, string>({
       query: (url: string) => ({
         url,
@@ -23,4 +28,5 @@ export const pokeApi = createApi({
   }),
 });
 
-export const { usePokemonsQuery, useLazyPokemonDetailsQuery } = pokeApi;
+export const { usePokemonsQuery, useLazyPokemonSearchQuery, useLazyPokemonDetailsQuery } =
+  pokeApi;
