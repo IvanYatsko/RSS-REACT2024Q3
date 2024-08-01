@@ -13,18 +13,17 @@ import {
 } from '../../store/pokeapi/poke.api';
 import { IPokemonResult } from '../../types/Pokemon/pokemons';
 import { useAppSelector } from '../../hooks/redux';
+import { useActions } from '../../hooks/actions';
 
 const ContentSection: React.FC = () => {
   const { searchValue } = useAppSelector(state => state.search);
+  const { selectedItems } = useAppSelector(state => state.poke);
+  const { cleareSelectedValue, addSelectedValue, deleteSelectedValue } = useActions();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState<IPokemonDetails | null>(null);
   const [isCardSelected, setIsCardSelected] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [selectedItems, setSelectedItems] = useState<Set<number>>(() => {
-    const storedSelectedItems = localStorage.getItem('selectedItems');
-    return storedSelectedItems ? new Set(JSON.parse(storedSelectedItems)) : new Set();
-  });
   const [pokemonList, setPokemonList] = useState<IPokemonDetails[] | null>(null);
 
   const page = Number(searchParams.get('page')) || 1;
@@ -77,10 +76,6 @@ const ContentSection: React.FC = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem('selectedItems', JSON.stringify([...selectedItems]));
-  }, [selectedItems]);
-
-  useEffect(() => {
     if (Number(page) < 1) {
       navigate('/404');
     }
@@ -122,19 +117,15 @@ const ContentSection: React.FC = () => {
   };
 
   const handleCheckboxChange = (id: number, isSelected: boolean) => {
-    setSelectedItems(prevSelectedItems => {
-      const updateSelectedItems = new Set(prevSelectedItems);
-      if (isSelected) {
-        updateSelectedItems.add(id);
-      } else {
-        updateSelectedItems.delete(id);
-      }
-      return updateSelectedItems;
-    });
+    if (isSelected) {
+      addSelectedValue(id);
+    } else {
+      deleteSelectedValue(id);
+    }
   };
 
   const handelUnselectAll = () => {
-    setSelectedItems(new Set());
+    cleareSelectedValue();
   };
 
   const handelOnDownload = async () => {
@@ -189,7 +180,7 @@ const ContentSection: React.FC = () => {
                 {...pokemonItem}
                 key={pokemonItem.id}
                 onClick={() => handleCardClick(pokemonItem)}
-                selected={!!pokemonItem.id && selectedItems.has(pokemonItem.id)}
+                selected={!!pokemonItem.id && selectedItems.includes(pokemonItem.id)}
                 onSelect={isSelected =>
                   pokemonItem.id !== undefined &&
                   handleCheckboxChange(pokemonItem.id, isSelected)
@@ -206,11 +197,11 @@ const ContentSection: React.FC = () => {
           </>
         )}
       </div>
-      {selectedItems.size > 0 && (
+      {selectedItems.length > 0 && (
         <SelectionFlyout
           onUnselectAll={handelUnselectAll}
           generateDownloadData={handelOnDownload}
-          selectedItems={selectedItems.size}
+          selectedItems={selectedItems.length}
         />
       )}
     </>
