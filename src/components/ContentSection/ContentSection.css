@@ -1,0 +1,40 @@
+.content-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.selected-mode {
+  display: grid;
+  grid-template-columns: 1fr 2px 40%;
+  gap: 20px;
+}
+
+.selected-mode .cards-container {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.divider {
+  width: 2px;
+  background-color: #ccc;
+}
+
+.selected-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 20px;
+}
