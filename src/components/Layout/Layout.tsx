@@ -3,7 +3,7 @@ import ThemeButton from '../ThemeButton';
 import './layout.css';
 
 const Layout = () => {
-  console.log('nextjs-ssr-pages-api');
+  console.log('nextjs-ssr-app-router-api');
   return (
     <div className="layout">
       <header className="header-style">
